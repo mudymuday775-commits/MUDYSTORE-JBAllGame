@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUDY STORE - JB All Game</title>
+    <link href="images/mudystore.png" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0c10;
+            --surface: #161b22;
+            --accent: #3b82f6; /* Electric Blue */
+            --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            --text-main: #ffffff;
+            --text-muted: #8b949e;
+            --border: rgba(255, 255, 255, 0.05);
+            --success: #10b981;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--bg-dark); 
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* --- HEADER & PROFIL --- */
+        .hero-section {
+            padding: 80px 5% 40px;
+            text-align: center;
+            background: radial-gradient(circle at top, rgba(59, 130, 246, 0.15) 0%, transparent 50%);
+        }
+
+        .shop-logo {
+            width: 70px; height: 70px;
+            border-radius: 20px;
+            background: var(--accent-gradient);
+            margin: 0 auto 20px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+            font-weight: 800; font-size: 1.5rem;
+        }
+
+        .hero-section h1 { font-size: 2rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 10px; }
+        .hero-section p { color: var(--text-muted); font-size: 0.95rem; max-width: 500px; margin: 0 auto; }
+
+        /* --- FILTER GAME --- */
+        .filter-container {
+            display: flex; justify-content: center; gap: 10px;
+            padding: 20px 5%;
+            position: sticky; top: 0;
+            background: rgba(10, 12, 16, 0.8);
+            backdrop-filter: blur(20px);
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .filter-btn:hover { background: var(--border); color: var(--text-main); }
+        .filter-btn.active { 
+            background: var(--accent-gradient); 
+            color: white; 
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        /* --- GRID KATALOG --- */
+        .catalog { padding: 50px 5%; max-width: 1300px; margin: 0 auto; }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover { 
+            transform: translateY(-8px); 
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .card-img { width: 100%; height: 190px; object-fit: cover; }
+
+        .card-body { padding: 20px; }
+        .card-tag { font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+        .card-title { font-size: 1.1rem; margin: 8px 0; font-weight: 700; }
+        .card-price { font-size: 1.25rem; color: var(--success); font-weight: 800; }
+
+        /* --- DETAIL PANEL (SLIDE-IN) --- */
+        .panel {
+            position: fixed; top: 0; right: 0; width: 100%; max-width: 500px; height: 100%;
+            background: var(--surface); z-index: 1001;
+            transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left: 1px solid var(--border);
+            display: flex; flex-direction: column;
+        }
+        .panel.active { transform: translateX(0); }
+
+        .panel-content { padding: 30px; overflow-y: auto; flex-grow: 1; }
+        .panel-img { width: 100%; border-radius: 16px; margin-bottom: 20px; border: 1px solid var(--border); }
+        
+        .gallery-row { display: flex; gap: 10px; margin-bottom: 25px; }
+        .gallery-row img { width: 70px; height: 50px; border-radius: 8px; object-fit: cover; cursor: pointer; border: 1px solid var(--border); }
+
+        .spec-box { background: rgba(255,255,255,0.03); border-radius: 16px; padding: 20px; margin-top: 25px; }
+        .spec-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+        .spec-item:last-child { border: none; }
+        .label { color: var(--text-muted); }
+
+        .panel-footer { padding: 30px; border-top: 1px solid var(--border); background: var(--surface); }
+        .btn-buy { 
+            display: block; width: 100%; padding: 16px; 
+            background: var(--accent-gradient); color: white;
+            text-align: center; text-decoration: none; border-radius: 14px;
+            font-weight: 700; font-size: 1rem; transition: 0.3s;
+        }
+        .btn-buy:hover { opacity: 0.9; transform: scale(0.98); }
+
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+            z-index: 1000; display: none;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section { padding-top: 50px; }
+            .filter-container { gap: 5px; overflow-x: auto; justify-content: flex-start; }
+            .filter-btn { white-space: nowrap; padding: 8px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="overlay" id="overlay" onclick="closePanel()"></div>
+
+<header class="hero-section">
+    <div class="shop-logo">M℘</div>
+    <h1>MUDY STORE</h1>
+    <p>JB akun premium dengan keamanan terjamin & transaksi instan.</p>
+</header>
+
+<nav class="filter-container">
+    <button class="filter-btn active" onclick="filter('all', this)">All Games</button>
+    <button class="filter-btn" onclick="filter('ff', this)">Free Fire</button>
+    <button class="filter-btn" onclick="filter('ml', this)">Mobile Legends</button>
+    <button class="filter-btn" onclick="filter('pubg', this)">PUBG</button>
+    <button class="filter-btn" onclick="filter('spike', this)">The Spike</button>
+</nav>
+
+<main class="catalog">
+    <div class="grid" id="mainGrid">
+        
+        <div class="card" data-cat="ff" onclick="openPanel(this)">
+            <img src="images/akun1.jpg" class="card-img">
+            <div class="card-body">
+                <div class="card-tag">Free Fire</div>
+                <h3 class="card-title">SG Evo (Lvl 5) + Bundle 8bit</h3>
+                <div class="card-price">Rp 120.000</div>
+            </div>
+            <div class="hidden-info" style="display:none;">
+                <p>Akun Polosan. SG2 Evo (Lvl 5). Login Google, V150+.</p>
+                <div class="specs">
+                    <div class="spec-item"><span class="label">Vault</span> <b>150+</b></div>
+                    <div class="spec-item"><span class="label">SG</span> <b>Evo (Lvl 5)</b></div>
+                    <div class="spec-item"><span class="label">Log</span> <b>Google</b></div>
+                </div>
+                <div class="gallery">
+                  images/akun1.jpg,
+                  images/akun1.1.jpg,
+                  images/akun1.2.jpg,
+                  images/akun1.3.jpg
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-cat="ml" onclick="openPanel(this)">
+            <img src="images/akunml1.jpg" class="card-img">
+            <div class="card-body">
+                <div class="card-tag">Mobile Legends</div>
+                <h3 class="card-title">12 Collector + All Hero Max</h3>
+                <div class="card-price">Rp 20.000</div>
+            </div>
+            <div class="hidden-info" style="display:none;">
+                <p>Spesifikasi Polosan,  Hero 30, Skin Create Natalia, Special Hilda, Elite Karina.</p>
+                <div class="specs">
+                    <div class="spec-item"><span class="label">Skin Special</span> <b>1</b></div>
+                    <div class="spec-item"><span class="label">Skin Elite</span> <b>5</b></div>
+                    <div class="spec-item"><span class="label">Skin Basic</span> <b>20</b></div>
+                    <div class="spec-item"><span class="label">Winrate Total</span> <b>68%</b></div>
+                    <div class="spec-item"><span class="label">Sisa Diamond</span> <b>0</b></div>
+                </div>
+                <div class="gallery">
+                  images/akunml1.jpg,
+                  images/akunml1.1.jpg,
+                  images/akunml1.2.jpg  
+                </div>
+            </div>
+        </div>
+
+       <div class="card" data-cat="spike" onclick="openPanel(this)">
+            <img src="images/akunspike1.jpg" class="card-img">
+            <div class="card-body">
+                <div class="card-tag">The Spike</div>
+                <h3 class="card-title">Nishikawa Max And Isabel+4.</h3>
+                <div class="card-price">Rp 100.000</div>
+            </div>
+            <div class="hidden-info" style="display:none;">
+                <p>Spesifikasi Nishikawa, Isabel+4, Jaehyeon+5, Oasis+2, Sohee+2,</p>
+                <div class="specs">
+                    <div class="spec-item"><span class="label">Rank S</span> <b>15</b></div>
+                    <div class="spec-item"><span class="label">Koin</span> <b>2.429.000</b></div>
+                    <div class="spec-item"><span class="label">Exp Poin</span> <b>1.830.000</b></div>
+                    <div class="spec-item"><span class="label">V Poin</span> <b>20%</b></div>
+                    
+                </div>
+                <div class="gallery">
+                  images/akunspike1.jpg,
+                  images/akunspike1.1.jpg
+                  
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</main>
+
+<div class="panel" id="detailPanel">
+    <div class="panel-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+            <span id="pTag" class="card-tag"></span>
+            <span style="cursor: pointer; font-size: 1.5rem;" onclick="closePanel()">&times;</span>
+        </div>
+        
+        <img src="" id="pMainImg" class="panel-img">
+        <div class="gallery-row" id="pGallery"></div>
+
+        <h2 id="pTitle" style="font-size: 1.6rem; font-weight: 800; margin-bottom: 5px;"></h2>
+        <div id="pPrice" class="card-price" style="font-size: 1.8rem; margin-bottom: 20px;"></div>
+        
+        <p id="pDesc" style="color: var(--text-muted); font-size: 0.95rem;"></p>
+
+        <div class="spec-box" id="pSpecs"></div>
+    </div>
+    <div class="panel-footer">
+        <a href="https://wa.me/6285176942843" id="pWA" target="_blank" class="btn-buy">HUBUNGI ADMIN (WA)</a>
+    </div>
+</div>
+
+<script>
+    function filter(cat, btn) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.card').forEach(c => {
+            c.style.display = (cat === 'all' || c.dataset.cat === cat) ? 'block' : 'none';
+        });
+    }
+
+    function openPanel(card) {
+        const info = card.querySelector('.hidden-info');
+        const imgList = info.querySelector('.gallery').innerText.split(',');
+
+        document.getElementById('pTitle').innerText = card.querySelector('.card-title').innerText;
+        document.getElementById('pPrice').innerText = card.querySelector('.card-price').innerText;
+        document.getElementById('pTag').innerText = card.querySelector('.card-tag').innerText;
+        document.getElementById('pDesc').innerText = info.querySelector('p').innerText;
+        document.getElementById('pSpecs').innerHTML = info.querySelector('.specs').innerHTML;
+        document.getElementById('pMainImg').src = imgList[0];
+
+        const gal = document.getElementById('pGallery');
+        gal.innerHTML = '';
+        imgList.forEach(url => {
+            const img = document.createElement('img');
+            img.src = url.trim();
+            img.onclick = () => document.getElementById('pMainImg').src = url.trim();
+            gal.appendChild(img);
+        });
+
+        const waNum = "6285176942843"; // GANTI NOMOR WA DISINI
+        const text = `Halo Admin Virtua, saya tertarik dengan akun: ${card.querySelector('.card-title').innerText}`;
+        document.getElementById('pWA').href = `https://wa.me/${waNum}?text=${encodeURIComponent(text)}`;
+
+        document.getElementById('detailPanel').classList.add('active');
+        document.getElementById('overlay').style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closePanel() {
+        document.getElementById('detailPanel').classList.remove('active');
+        document.getElementById('overlay').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+</script>
+
+</body>
+</html>
